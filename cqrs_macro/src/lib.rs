@@ -153,6 +153,7 @@ pub fn listener(
         (quote! {
             #[no_mangle]
             pub extern "stdcall" fn #extern_func_name(#args_name_t) -> #result_type {
+                eprintln!(#event_name);
                 #(#attrs)*
                 #[inline]
                 #func
