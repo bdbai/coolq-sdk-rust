@@ -184,7 +184,6 @@ impl User {
     }
 
     pub(crate) fn decode(b: &[u8]) -> std::io::Result<User> {
-        dbg!(b);
         let mut b = Cursor::new(base64::decode(&b).expect("Invalid base64 - decode User"));
         Ok(User {
             user_id: b.read_i64::<BigEndian>()?,
