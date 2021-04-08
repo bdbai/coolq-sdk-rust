@@ -162,6 +162,9 @@ impl User {
     //如果想获得最新信息，请使用update。
     pub(crate) fn new(user_id: i64) -> User {
         let mut user: User = if let Ok(c) = get_stranger_info(user_id, false) {
+            use std::ffi::CStr;
+            dbg!(c.0);
+            dbg!(unsafe { CStr::from_ptr(c.0) });
             c.try_into().expect("cannot decode User")
         } else {
             Default::default()

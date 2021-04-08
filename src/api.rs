@@ -1,22 +1,22 @@
 //! # 酷q相关api
 //! 在运行时调用CQP.dll
 
+use std::fmt::Formatter;
 use std::{
     convert::{TryFrom, TryInto},
     io::Error as IoError,
     os::raw::c_char,
     ptr::null,
 };
-use std::fmt::Formatter;
 
 use once_cell::sync::OnceCell;
 
 use crate::targets::{
-    File,
     group::{Group, GroupMember},
     message::MessageSegment,
     read_multi_object,
-    user::{FriendInfo, User}
+    user::{FriendInfo, User},
+    File,
 };
 
 static AUTH_CODE: OnceCell<i32> = OnceCell::new();
@@ -372,7 +372,11 @@ convert_from!(CQLogLevel, i32, |level| match level {
 convert_from!(bool, i32, |b| b as i32);
 convert_from!(*const c_char);
 convert_from!((), i32, |_| 0); // 为了支持listener可以返回空()
-convert_from!(&MessageSegment, *const c_char, |ms: &MessageSegment| gb18030!(ms.to_string()));
+convert_from!(
+    &MessageSegment,
+    *const c_char,
+    |ms: &MessageSegment| gb18030!(ms.to_string())
+);
 
 convert_to!(i64);
 convert_to!(i32);
@@ -431,7 +435,7 @@ impl<F> Convert<F> {
 
 /// 用于转换类型
 #[derive(Debug)]
-pub struct Convert<T>(T);
+pub struct Convert<T>(pub T);
 
 #[derive(Debug)]
 pub struct Error(pub i32);
